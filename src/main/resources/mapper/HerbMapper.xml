@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jyc.cmpr_net_bd.mapper.HerbMapper">
+    <resultMap id="HerbResultMap" type="com.jyc.cmpr_net_bd.entity.Herb">
+        <id column="herb_id" jdbcType="VARCHAR" property="herbId" />
+        <result column="chinese_name" jdbcType="VARCHAR" property="chineseName"/>
+        <result column="pinyin_name" jdbcType="VARCHAR" property="pinyinName"/>
+        <result column="latin_name" jdbcType="VARCHAR" property="latinName"/>
+        <result column="english_name" jdbcType="VARCHAR" property="englishName"/>
+        <result column="properties_cn" jdbcType="VARCHAR" property="propertiesCn"/>
+        <result column="properties_en" jdbcType="VARCHAR" property="propertiesEn"/>
+        <result column="meridians_cn" jdbcType="VARCHAR" property="meridiansCn"/>
+        <result column="meridians_en" jdbcType="VARCHAR" property="meridiansEn"/>
+        <result column="class_cn" jdbcType="VARCHAR" property="classCn"/>
+        <result column="class_en" jdbcType="VARCHAR" property="classEn"/>
+        <result column="usepart" jdbcType="VARCHAR" property="usepart"/>
+        <result column="alias" jdbcType="VARCHAR" property="alias"/>
+        <result column="toxicity_cn" jdbcType="VARCHAR" property="toxicityCn"/>
+        <result column="props_cn" jdbcType="VARCHAR" property="propsCn"/>
+        <result column="flavour_cn" jdbcType="VARCHAR" property="flavourCn"/>
+        <result column="toxicity_en" jdbcType="VARCHAR" property="toxicityEn"/>
+        <result column="props_en" jdbcType="VARCHAR" property="propsEn"/>
+        <result column="flavour_en" jdbcType="VARCHAR" property="flavourEn"/>
+        <result column="function" jdbcType="VARCHAR" property="function"/>
+        <collection property="ingredients" ofType="com.jyc.cmpr_net_bd.entity.Ingredient">
+            <id column="ingredient_id" jdbcType="VARCHAR" property="id" />
+            <result column="alias" jdbcType="VARCHAR" property="alias"/>
+            <result column="cas_id" jdbcType="VARCHAR" property="casId"/>
+            <result column="DrugBank_id" jdbcType="VARCHAR" property="DrugBankId"/>
+            <result column="ingredient_smile" jdbcType="VARCHAR" property="smiles"/>
+            <result column="ingredient_formula" jdbcType="VARCHAR" property="formula"/>
+            <result column="HERB_id" jdbcType="VARCHAR" property="HERBId"/>
+            <result column="ingredient_name" jdbcType="VARCHAR" property="name"/>
+            <result column="ingredient_weight" jdbcType="VARCHAR" property="weight"/>
+            <result column="ob_score" jdbcType="VARCHAR" property="obScore"/>
+            <result column="type" jdbcType="VARCHAR" property="type"/>
+            <result column="PubChem_id" jdbcType="VARCHAR" property="PubChemId"/>
+            <result column="TCMID_id" jdbcType="VARCHAR" property="TCMIDId"/>
+            <result column="TCM_ID_id" jdbcType="VARCHAR" property="TCM_IDId"/>
+            <result column="TCMSP_id" jdbcType="VARCHAR" property="TCMSPId"/>
+        </collection>
+    </resultMap>
+
+    <select id="getHerbsById" parameterType="java.util.List" resultMap="HerbResultMap">
+        SELECT h.*, i.*
+        FROM herb h
+        LEFT JOIN ingredient_of_herb r ON h.herb_id = r.herb_id
+        LEFT JOIN ingredient i ON r.ingredient_id = i.ingredient_id
+        <where>
+            h.herb_id IN
+            <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+</mapper>
