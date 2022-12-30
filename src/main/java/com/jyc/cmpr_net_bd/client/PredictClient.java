@@ -56,6 +56,18 @@ public class PredictClient {
         }
     }
 
+    public GraphResponse getGraph(GraphRequset req) {
+        try {
+            open();
+            return predictService.GetGraph(req);
+        } catch (TException e) {
+            e.printStackTrace();
+            return new GraphResponse("1", new ArrayList<>(), new ArrayList<>());
+        } finally {
+            close();
+        }
+    }
+
     public void open() throws TTransportException {
         transport.open();
     }

@@ -5,6 +5,8 @@ import com.jyc.cmpr_net_bd.entity.Herb;
 import com.jyc.cmpr_net_bd.entity.Symptom;
 import com.jyc.cmpr_net_bd.service.HerbService;
 import com.jyc.cmpr_net_bd.service.SymService;
+import com.jyc.cmpr_net_bd.thrift.GraphRequset;
+import com.jyc.cmpr_net_bd.thrift.GraphResponse;
 import com.jyc.cmpr_net_bd.thrift.PredictRequest;
 import com.jyc.cmpr_net_bd.thrift.PredictResponse;
 import com.jyc.cmpr_net_bd.util.Result;
@@ -52,6 +54,20 @@ public class DataController {
         PredictResponse res = predictClient.predict(req);
         if (res.code.equals("0")) {
             return Result.ofSuccess(res.result);
+        } else {
+            return Result.ofFail("2", "Something wrong");
+        }
+    }
+
+    @PostMapping("/graph")
+    public Result getEmbeddingSim(@RequestParam("idList") List<String> idList) {
+        if (idList.size() == 0) {
+            return Result.ofFail("2", "Something wrong");
+        }
+        GraphRequset req = new GraphRequset(idList);
+        GraphResponse res = predictClient.getGraph(req);
+        if (res.code.equals("0")) {
+            return Result.ofSuccess(res);
         } else {
             return Result.ofFail("2", "Something wrong");
         }
