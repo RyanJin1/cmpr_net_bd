@@ -18,6 +18,7 @@ struct PredictResponse {
 
 struct GraphRequset {
     1: list<string> herbs
+    2: string embedType
 }
 
 struct RelItem {

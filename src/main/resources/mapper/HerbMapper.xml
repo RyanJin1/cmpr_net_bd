@@ -21,7 +21,7 @@
         <result column="toxicity_en" jdbcType="VARCHAR" property="toxicityEn"/>
         <result column="props_en" jdbcType="VARCHAR" property="propsEn"/>
         <result column="flavour_en" jdbcType="VARCHAR" property="flavourEn"/>
-        <result column="function" jdbcType="VARCHAR" property="function"/>
+        <result column="function" jdbcType="VARCHAR" property="func"/>
         <collection property="ingredients" ofType="com.jyc.cmpr_net_bd.entity.Ingredient">
             <id column="ingredient_id" jdbcType="VARCHAR" property="id" />
             <result column="alias" jdbcType="VARCHAR" property="alias"/>

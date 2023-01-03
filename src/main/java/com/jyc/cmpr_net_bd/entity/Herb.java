@@ -81,7 +81,7 @@ public class Herb {
     private String flavourEn;
 
     @TableField("function")
-    private String function;
+    private String func;
 
     private List<Ingredient> ingredients;
 }

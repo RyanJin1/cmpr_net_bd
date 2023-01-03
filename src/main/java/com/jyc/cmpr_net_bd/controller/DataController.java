@@ -60,11 +60,12 @@ public class DataController {
     }
 
     @PostMapping("/graph")
-    public Result getEmbeddingSim(@RequestParam("idList") List<String> idList) {
+    public Result getEmbeddingSim(@RequestParam("idList") List<String> idList,
+                                  @RequestParam("embedType") String embedType) {
         if (idList.size() == 0) {
             return Result.ofFail("2", "Something wrong");
         }
-        GraphRequset req = new GraphRequset(idList);
+        GraphRequset req = new GraphRequset(idList, embedType);
         GraphResponse res = predictClient.getGraph(req);
         if (res.code.equals("0")) {
             return Result.ofSuccess(res);
