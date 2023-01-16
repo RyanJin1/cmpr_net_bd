@@ -1,8 +1,10 @@
 package com.jyc.cmpr_net_bd.controller;
 
 import com.jyc.cmpr_net_bd.client.PredictClient;
+import com.jyc.cmpr_net_bd.entity.Disease;
 import com.jyc.cmpr_net_bd.entity.Herb;
 import com.jyc.cmpr_net_bd.entity.Symptom;
+import com.jyc.cmpr_net_bd.service.DiseaseService;
 import com.jyc.cmpr_net_bd.service.HerbService;
 import com.jyc.cmpr_net_bd.service.SymService;
 import com.jyc.cmpr_net_bd.thrift.GraphRequset;
@@ -28,6 +30,8 @@ public class DataController {
     private SymService symService;
     @Resource
     private HerbService herbService;
+    @Resource
+    private DiseaseService diseaseService;
 
     @Autowired
     PredictClient predictClient;
@@ -72,5 +76,11 @@ public class DataController {
         } else {
             return Result.ofFail("2", "Something wrong");
         }
+    }
+
+    @GetMapping("/disease/{keyword}")
+    public Result getDiseaseSuggestion(@PathVariable("keyword") String keyword) {
+        List<Disease> keywords = diseaseService.getDiseaseSuggestion(keyword);
+        return Result.ofSuccess(keywords);
     }
 }
