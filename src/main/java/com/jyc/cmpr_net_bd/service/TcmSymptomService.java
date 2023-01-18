@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * @author Jin Yichao
  * @version 1.0
- * @date 2023/1/16 11:06
+ * @date 2023/1/16 14:18
  */
-public interface DiseaseService extends IService<Disease>{
-    public List<Disease> getDiseaseSuggestion(String keyword);
+public interface TcmSymptomService extends IService<TcmSymptom> {
+    public List<TcmSymptom> getTcmSymptomsOfDisease(String diseaseId);
 }

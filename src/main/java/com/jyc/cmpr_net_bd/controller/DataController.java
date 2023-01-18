@@ -4,9 +4,11 @@ import com.jyc.cmpr_net_bd.client.PredictClient;
 import com.jyc.cmpr_net_bd.entity.Disease;
 import com.jyc.cmpr_net_bd.entity.Herb;
 import com.jyc.cmpr_net_bd.entity.Symptom;
+import com.jyc.cmpr_net_bd.entity.TcmSymptom;
 import com.jyc.cmpr_net_bd.service.DiseaseService;
 import com.jyc.cmpr_net_bd.service.HerbService;
 import com.jyc.cmpr_net_bd.service.SymService;
+import com.jyc.cmpr_net_bd.service.TcmSymptomService;
 import com.jyc.cmpr_net_bd.thrift.GraphRequset;
 import com.jyc.cmpr_net_bd.thrift.GraphResponse;
 import com.jyc.cmpr_net_bd.thrift.PredictRequest;
@@ -32,6 +34,8 @@ public class DataController {
     private HerbService herbService;
     @Resource
     private DiseaseService diseaseService;
+    @Resource
+    private TcmSymptomService tcmSymptomService;
 
     @Autowired
     PredictClient predictClient;
@@ -51,7 +55,7 @@ public class DataController {
     }
 
     @PostMapping("/predict")
-    public Result predict(@RequestParam("idList") List<Integer> idList) {
+    public Result predict(@RequestParam("idList") List<String> idList) {
         if (idList.size() == 0)
             return Result.ofFail("2", "Something wrong");
         PredictRequest req = new PredictRequest(idList);
@@ -80,7 +84,13 @@ public class DataController {
 
     @GetMapping("/disease/{keyword}")
     public Result getDiseaseSuggestion(@PathVariable("keyword") String keyword) {
-        List<Disease> keywords = diseaseService.getDiseaseSuggestion(keyword);
-        return Result.ofSuccess(keywords);
+        List<Disease> diseases = diseaseService.getDiseaseSuggestion(keyword);
+        return Result.ofSuccess(diseases);
+    }
+
+    @GetMapping("/tcmSym/{diseaseId}")
+    public Result getTcmSymptomsOfDisease(@PathVariable("diseaseId") String diseaseId) {
+        List<TcmSymptom> tcmSymptoms = tcmSymptomService.getTcmSymptomsOfDisease(diseaseId);
+        return Result.ofSuccess(tcmSymptoms);
     }
 }
