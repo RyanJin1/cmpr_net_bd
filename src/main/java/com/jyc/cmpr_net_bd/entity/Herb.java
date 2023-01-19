@@ -24,7 +24,7 @@ import java.util.List;
 @TableName("herb")
 public class Herb {
     @TableId("herb_id")
-    private String herbId;
+    private String id;
 
     @TableField("chinese_name")
     private String chineseName;

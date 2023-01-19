@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jyc.cmpr_net_bd.mapper.HerbMapper">
     <resultMap id="HerbResultMap" type="com.jyc.cmpr_net_bd.entity.Herb">
-        <id column="herb_id" jdbcType="VARCHAR" property="herbId" />
+        <id column="herb_id" jdbcType="VARCHAR" property="id" />
         <result column="chinese_name" jdbcType="VARCHAR" property="chineseName"/>
         <result column="pinyin_name" jdbcType="VARCHAR" property="pinyinName"/>
         <result column="latin_name" jdbcType="VARCHAR" property="latinName"/>
@@ -24,7 +24,7 @@
         <result column="function" jdbcType="VARCHAR" property="func"/>
         <collection property="ingredients" ofType="com.jyc.cmpr_net_bd.entity.Ingredient">
             <id column="ingredient_id" jdbcType="VARCHAR" property="id" />
-            <result column="alias" jdbcType="VARCHAR" property="alias"/>
+            <result column="i_alias" jdbcType="VARCHAR" property="alias"/>
             <result column="cas_id" jdbcType="VARCHAR" property="casId"/>
             <result column="DrugBank_id" jdbcType="VARCHAR" property="DrugBankId"/>
             <result column="ingredient_smile" jdbcType="VARCHAR" property="smiles"/>
@@ -42,7 +42,7 @@
     </resultMap>
 
     <select id="getHerbsById" parameterType="java.util.List" resultMap="HerbResultMap">
-        SELECT h.*, i.*
+        SELECT h.*, i.*, i.alias as i_alias
         FROM herb h
         LEFT JOIN ingredient_of_herb r ON h.herb_id = r.herb_id
         LEFT JOIN ingredient i ON r.ingredient_id = i.ingredient_id
