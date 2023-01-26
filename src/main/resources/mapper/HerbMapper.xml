@@ -21,7 +21,7 @@
         <result column="toxicity_en" jdbcType="VARCHAR" property="toxicityEn"/>
         <result column="props_en" jdbcType="VARCHAR" property="propsEn"/>
         <result column="flavour_en" jdbcType="VARCHAR" property="flavourEn"/>
-        <result column="function" jdbcType="VARCHAR" property="func"/>
+        <result column="func" jdbcType="VARCHAR" property="func"/>
         <collection property="ingredients" ofType="com.jyc.cmpr_net_bd.entity.Ingredient">
             <id column="ingredient_id" jdbcType="VARCHAR" property="id" />
             <result column="i_alias" jdbcType="VARCHAR" property="alias"/>
@@ -41,7 +41,7 @@
         </collection>
     </resultMap>
 
-    <select id="getHerbsById" parameterType="java.util.List" resultMap="HerbResultMap">
+    <select id="getHerbsWithIngredientsById" parameterType="java.util.List" resultMap="HerbResultMap">
         SELECT h.*, i.*, i.alias as i_alias
         FROM herb h
         LEFT JOIN ingredient_of_herb r ON h.herb_id = r.herb_id

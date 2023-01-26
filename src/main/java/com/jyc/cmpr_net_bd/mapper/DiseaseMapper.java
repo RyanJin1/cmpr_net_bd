@@ -2,7 +2,6 @@ package com.jyc.cmpr_net_bd.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jyc.cmpr_net_bd.entity.Disease;
-import com.jyc.cmpr_net_bd.entity.TcmSymptom;
 
 import java.util.List;
 
@@ -12,4 +11,5 @@ import java.util.List;
  * @date 2023/1/16 11:13
  */
 public interface DiseaseMapper extends BaseMapper<Disease> {
+    public List<Disease> getDiseaseWithTargetsById(String diseaseId);
 }

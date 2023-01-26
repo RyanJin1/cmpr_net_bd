@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * @author Jin Yichao
  * @version 1.0
@@ -66,4 +68,5 @@ public class Ingredient {
     @TableField("TCMSP_id")
     private String TCMSPId;
 
+    private List<Target> targets;
 }

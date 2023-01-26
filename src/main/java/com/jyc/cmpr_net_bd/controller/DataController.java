@@ -1,14 +1,8 @@
 package com.jyc.cmpr_net_bd.controller;
 
 import com.jyc.cmpr_net_bd.client.PredictClient;
-import com.jyc.cmpr_net_bd.entity.Disease;
-import com.jyc.cmpr_net_bd.entity.Herb;
-import com.jyc.cmpr_net_bd.entity.Symptom;
-import com.jyc.cmpr_net_bd.entity.TcmSymptom;
-import com.jyc.cmpr_net_bd.service.DiseaseService;
-import com.jyc.cmpr_net_bd.service.HerbService;
-import com.jyc.cmpr_net_bd.service.SymService;
-import com.jyc.cmpr_net_bd.service.TcmSymptomService;
+import com.jyc.cmpr_net_bd.entity.*;
+import com.jyc.cmpr_net_bd.service.*;
 import com.jyc.cmpr_net_bd.thrift.GraphRequset;
 import com.jyc.cmpr_net_bd.thrift.GraphResponse;
 import com.jyc.cmpr_net_bd.thrift.PredictRequest;
@@ -32,6 +26,8 @@ public class DataController {
     private SymService symService;
     @Resource
     private HerbService herbService;
+    @Resource
+    private IngredientService ingredientService;
     @Resource
     private DiseaseService diseaseService;
     @Resource
@@ -92,5 +88,17 @@ public class DataController {
     public Result getTcmSymptomsOfDisease(@PathVariable("diseaseId") String diseaseId) {
         List<TcmSymptom> tcmSymptoms = tcmSymptomService.getTcmSymptomsOfDisease(diseaseId);
         return Result.ofSuccess(tcmSymptoms);
+    }
+
+    @PostMapping("/ingredients")
+    public Result getIngredients(@RequestParam("idList") List<String> idList) {
+        List<Ingredient> ingredients = ingredientService.getIngredientsWithTargetsById(idList);
+        return Result.ofSuccess(ingredients);
+    }
+
+    @PostMapping("/disease")
+    public Result getDisease(@RequestParam("id") String diseaseId) {
+        List<Disease> diseases = diseaseService.getDiseaseWithTargetsById(diseaseId);
+        return Result.ofSuccess(diseases);
     }
 }

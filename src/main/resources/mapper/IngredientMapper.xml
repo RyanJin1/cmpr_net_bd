@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jyc.cmpr_net_bd.mapper.IngredientMapper">
+    <resultMap id="IngredientResultMap" type="com.jyc.cmpr_net_bd.entity.Ingredient">
+        <id column="ingredient_id" jdbcType="VARCHAR" property="id" />
+        <result column="alias" jdbcType="VARCHAR" property="alias"/>
+        <result column="cas_id" jdbcType="VARCHAR" property="casId"/>
+        <result column="DrugBank_id" jdbcType="VARCHAR" property="DrugBankId"/>
+        <result column="ingredient_smile" jdbcType="VARCHAR" property="smiles"/>
+        <result column="ingredient_formula" jdbcType="VARCHAR" property="formula"/>
+        <result column="HERB_id" jdbcType="VARCHAR" property="HERBId"/>
+        <result column="ingredient_name" jdbcType="VARCHAR" property="name"/>
+        <result column="ingredient_weight" jdbcType="VARCHAR" property="weight"/>
+        <result column="ob_score" jdbcType="FLOAT" property="obScore"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="PubChem_id" jdbcType="VARCHAR" property="PubChemId"/>
+        <result column="TCM_ID_id" jdbcType="VARCHAR" property="TCM_IDId"/>
+        <result column="TCMID_id" jdbcType="VARCHAR" property="TCMIDId"/>
+        <result column="TCMSP_id" jdbcType="VARCHAR" property="TCMSPId"/>
+        <collection property="targets" ofType="com.jyc.cmpr_net_bd.entity.Target">
+            <id column="HERB_target_id" jdbcType="VARCHAR" property="id" />
+            <result column="Tax_id" jdbcType="VARCHAR" property="taxId"/>
+            <result column="Gene_id" jdbcType="VARCHAR" property="geneId"/>
+            <result column="Gene_name" jdbcType="VARCHAR" property="name"/>
+            <result column="Gene_alias" jdbcType="VARCHAR" property="alias"/>
+            <result column="Chromosome" jdbcType="VARCHAR" property="chromosome"/>
+            <result column="Map_location" jdbcType="VARCHAR" property="mapLocation"/>
+            <result column="Description" jdbcType="VARCHAR" property="description"/>
+            <result column="Type_of_gene" jdbcType="VARCHAR" property="type"/>
+            <result column="OMIM_id" jdbcType="VARCHAR" property="omimId"/>
+            <result column="HGNC_id" jdbcType="VARCHAR" property="hgncId"/>
+            <result column="Ensembl_id" jdbcType="VARCHAR" property="ensemblId"/>
+            <result column="MGI_id" jdbcType="VARCHAR" property="mhiId"/>
+            <result column="TTD_target_id" jdbcType="VARCHAR" property="ttdTargetId"/>
+            <result column="TTD_target_type" jdbcType="VARCHAR" property="ttdTargetType"/>
+        </collection>
+    </resultMap>
+
+    <select id="getIngredientsWithTargetsById" parameterType="java.util.List" resultMap="IngredientResultMap">
+        SELECT i.*, t.*
+        FROM ingredient i
+        LEFT JOIN target_of_ingredient r ON i.ingredient_id = r.ingredient_id
+        LEFT JOIN target t ON r.target_id = t.HERB_target_id
+        <where>
+            i.ingredient_id IN
+            <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+</mapper>

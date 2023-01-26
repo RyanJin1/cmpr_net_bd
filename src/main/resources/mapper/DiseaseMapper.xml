@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jyc.cmpr_net_bd.mapper.DiseaseMapper">
+    <resultMap id="DiseaseResultMap" type="com.jyc.cmpr_net_bd.entity.Disease">
+        <id column="disease_id" jdbcType="VARCHAR" property="id" />
+        <result column="disease_name" jdbcType="VARCHAR" property="name"/>
+        <result column="umls_id" jdbcType="VARCHAR" property="umlsId"/>
+        <result column="mesh_id" jdbcType="VARCHAR" property="meshId"/>
+        <result column="omim_id" jdbcType="VARCHAR" property="omimId"/>
+        <result column="orphanet_id" jdbcType="VARCHAR" property="orphanetId"/>
+        <result column="icd10cm_id" jdbcType="VARCHAR" property="icd10cmId"/>
+        <result column="meddra_id" jdbcType="VARCHAR" property="meddraId"/>
+        <result column="linkDiseaseId" jdbcType="VARCHAR" property="linkDiseaseId"/>
+        <collection property="targets" ofType="com.jyc.cmpr_net_bd.entity.Target">
+            <id column="HERB_target_id" jdbcType="VARCHAR" property="id" />
+            <result column="Tax_id" jdbcType="VARCHAR" property="taxId"/>
+            <result column="Gene_id" jdbcType="VARCHAR" property="geneId"/>
+            <result column="Gene_name" jdbcType="VARCHAR" property="name"/>
+            <result column="Gene_alias" jdbcType="VARCHAR" property="alias"/>
+            <result column="Chromosome" jdbcType="VARCHAR" property="chromosome"/>
+            <result column="Map_location" jdbcType="VARCHAR" property="mapLocation"/>
+            <result column="Description" jdbcType="VARCHAR" property="description"/>
+            <result column="Type_of_gene" jdbcType="VARCHAR" property="type"/>
+            <result column="OMIM_id" jdbcType="VARCHAR" property="omimId"/>
+            <result column="HGNC_id" jdbcType="VARCHAR" property="hgncId"/>
+            <result column="Ensembl_id" jdbcType="VARCHAR" property="ensemblId"/>
+            <result column="MGI_id" jdbcType="VARCHAR" property="mhiId"/>
+            <result column="TTD_target_id" jdbcType="VARCHAR" property="ttdTargetId"/>
+            <result column="TTD_target_type" jdbcType="VARCHAR" property="ttdTargetType"/>
+        </collection>
+    </resultMap>
+
+    <select id="getDiseaseWithTargetsById" resultMap="DiseaseResultMap">
+        SELECT d.*, t.*
+        FROM disease d
+        LEFT JOIN target_of_disease r ON d.disease_id = r.disease_id
+        LEFT JOIN target t ON r.target_id = t.HERB_target_id
+        WHERE d.disease_id = #{diseaseId}
+    </select>
+</mapper>

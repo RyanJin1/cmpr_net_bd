@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface DiseaseService extends IService<Disease>{
     public List<Disease> getDiseaseSuggestion(String keyword);
+
+    public List<Disease> getDiseaseWithTargetsById(String diseaseId);
 }

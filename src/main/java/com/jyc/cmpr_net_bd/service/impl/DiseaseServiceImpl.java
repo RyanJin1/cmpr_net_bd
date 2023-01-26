@@ -26,4 +26,11 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
     public List<Disease> getDiseaseSuggestion(String keyword) {
         return diseaseMapper.selectList(new QueryWrapper<Disease>().like("disease_name", keyword));
     }
+
+    @Override
+    public List<Disease> getDiseaseWithTargetsById(String diseaseId) {
+        return diseaseMapper.getDiseaseWithTargetsById(diseaseId);
+    }
+
+
 }

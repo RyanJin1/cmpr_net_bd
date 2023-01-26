@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * @author Jin Yichao
  * @version 1.0
@@ -47,4 +49,6 @@ public class Disease {
 
     @TableField("link_disease_id")
     private String linkDiseaseId;
+
+    private List<Target> targets;
 }

@@ -80,7 +80,7 @@ public class Herb {
     @TableField("flavour_en")
     private String flavourEn;
 
-    @TableField("function")
+    @TableField("func")
     private String func;
 
     private List<Ingredient> ingredients;

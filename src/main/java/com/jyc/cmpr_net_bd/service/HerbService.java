@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface HerbService extends IService<Herb> {
     public List<Herb> getHerbsById(List<String> idList);
+
+    public List<Herb> getHerbsWithIngredientsById(List<String> idList);
 }

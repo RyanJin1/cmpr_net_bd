@@ -1,5 +1,6 @@
 package com.jyc.cmpr_net_bd.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jyc.cmpr_net_bd.entity.Herb;
 import com.jyc.cmpr_net_bd.mapper.HerbMapper;
@@ -20,6 +21,11 @@ public class HerbServiceImpl extends ServiceImpl<HerbMapper, Herb> implements He
     HerbMapper herbMapper;
 
     public List<Herb> getHerbsById(List<String> idList) {
-        return herbMapper.getHerbsById(idList);
+        return herbMapper.selectList(new QueryWrapper<Herb>().lambda().in(Herb::getId, idList));
+    }
+
+    @Override
+    public List<Herb> getHerbsWithIngredientsById(List<String> idList) {
+        return herbMapper.getHerbsWithIngredientsById(idList);
     }
 }
