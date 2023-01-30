@@ -1,10 +1,7 @@
 package com.jyc.cmpr_net_bd.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jyc.cmpr_net_bd.entity.Disease;
-import com.jyc.cmpr_net_bd.entity.Symptom;
-import com.jyc.cmpr_net_bd.entity.TcmSymptom;
 import com.jyc.cmpr_net_bd.mapper.DiseaseMapper;
 import com.jyc.cmpr_net_bd.service.DiseaseService;
 import org.springframework.stereotype.Service;
@@ -24,7 +21,7 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
 
     @Override
     public List<Disease> getDiseaseSuggestion(String keyword) {
-        return diseaseMapper.selectList(new QueryWrapper<Disease>().like("disease_name", keyword));
+        return diseaseMapper.getDiseaseSuggestion(keyword);
     }
 
     @Override

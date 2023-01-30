@@ -40,7 +40,31 @@ struct GraphResponse {
     4: optional string msg
 }
 
+struct GetClusterRequest {
+    1: ClusterSetting setting
+    2: list<string> targets
+}
+
+struct ClusterSetting {
+    1: double resolution
+    2: double beta
+    3: string obj_func
+}
+
+struct ClusterResultItem {
+    1: string id
+    2: i32 cluster
+}
+
+struct GetClusterResponse {
+    1: string code
+    2: list<ClusterResultItem> clusterResult
+    3: list<RelItem> rel
+    4: optional string msg
+}
+
 service PredictService {
     PredictResponse Predict(1: PredictRequest req)
     GraphResponse GetGraph(1: GraphRequset req)
+    GetClusterResponse GetCluster(1: GetClusterRequest req)
 }

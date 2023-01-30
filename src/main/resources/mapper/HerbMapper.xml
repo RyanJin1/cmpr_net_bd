@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jyc.cmpr_net_bd.mapper.HerbMapper">
-    <resultMap id="HerbResultMap" type="com.jyc.cmpr_net_bd.entity.Herb">
+    <resultMap id="BaseHerbResultMap" type="com.jyc.cmpr_net_bd.entity.Herb">
         <id column="herb_id" jdbcType="VARCHAR" property="id" />
         <result column="chinese_name" jdbcType="VARCHAR" property="chineseName"/>
         <result column="pinyin_name" jdbcType="VARCHAR" property="pinyinName"/>
@@ -22,6 +22,9 @@
         <result column="props_en" jdbcType="VARCHAR" property="propsEn"/>
         <result column="flavour_en" jdbcType="VARCHAR" property="flavourEn"/>
         <result column="func" jdbcType="VARCHAR" property="func"/>
+    </resultMap>
+
+    <resultMap id="HerbResultMap" type="com.jyc.cmpr_net_bd.entity.Herb" extends="BaseHerbResultMap">
         <collection property="ingredients" ofType="com.jyc.cmpr_net_bd.entity.Ingredient">
             <id column="ingredient_id" jdbcType="VARCHAR" property="id" />
             <result column="i_alias" jdbcType="VARCHAR" property="alias"/>
@@ -40,6 +43,17 @@
             <result column="TCMSP_id" jdbcType="VARCHAR" property="TCMSPId"/>
         </collection>
     </resultMap>
+
+    <select id="getHerbsById" parameterType="java.util.List" resultMap="BaseHerbResultMap">
+        SELECT *
+        FROM herb
+        <where>
+            herb_id IN
+            <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </select>
 
     <select id="getHerbsWithIngredientsById" parameterType="java.util.List" resultMap="HerbResultMap">
         SELECT h.*, i.*, i.alias as i_alias

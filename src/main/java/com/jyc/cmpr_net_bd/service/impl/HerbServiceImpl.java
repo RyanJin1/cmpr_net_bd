@@ -21,7 +21,7 @@ public class HerbServiceImpl extends ServiceImpl<HerbMapper, Herb> implements He
     HerbMapper herbMapper;
 
     public List<Herb> getHerbsById(List<String> idList) {
-        return herbMapper.selectList(new QueryWrapper<Herb>().lambda().in(Herb::getId, idList));
+        return herbMapper.getHerbsById(idList);
     }
 
     @Override

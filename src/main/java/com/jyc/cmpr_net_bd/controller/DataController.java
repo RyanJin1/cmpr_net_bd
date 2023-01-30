@@ -3,16 +3,16 @@ package com.jyc.cmpr_net_bd.controller;
 import com.jyc.cmpr_net_bd.client.PredictClient;
 import com.jyc.cmpr_net_bd.entity.*;
 import com.jyc.cmpr_net_bd.service.*;
-import com.jyc.cmpr_net_bd.thrift.GraphRequset;
-import com.jyc.cmpr_net_bd.thrift.GraphResponse;
-import com.jyc.cmpr_net_bd.thrift.PredictRequest;
-import com.jyc.cmpr_net_bd.thrift.PredictResponse;
+import com.jyc.cmpr_net_bd.thrift.*;
 import com.jyc.cmpr_net_bd.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Jin Yichao
@@ -100,5 +100,58 @@ public class DataController {
     public Result getDisease(@RequestParam("id") String diseaseId) {
         List<Disease> diseases = diseaseService.getDiseaseWithTargetsById(diseaseId);
         return Result.ofSuccess(diseases);
+    }
+
+    @PostMapping("/data/graph")
+    public Result getGraph(@RequestParam("herbIds") List<String> herbIds, @RequestParam("diseaseId") String diseaseId) {
+        if (herbIds.size() == 0 || diseaseId == null) {
+            return Result.ofFail("2", "Input id list is empty");
+        }
+        List<Herb> herbs = herbService.getHerbsWithIngredientsById(herbIds);
+        List<Ingredient> allIngredients = new ArrayList<>();
+        herbs.forEach(herb -> {
+            allIngredients.addAll(herb.getIngredients());
+        });
+        List<Ingredient> ingredients = allIngredients.stream().collect(
+                collectingAndThen(
+                        toCollection(() -> new TreeSet<>(comparing(Ingredient::getId))), ArrayList::new
+                ));
+        List<Ingredient> ingredientWithTargets =
+                ingredientService.getIngredientsWithTargetsById(ingredients.stream().map(Ingredient::getId).collect(Collectors.toList()));
+
+        List<Disease> diseaseWithTargets =
+                diseaseService.getDiseaseWithTargetsById(diseaseId);
+
+        List<Target> allTargets = new ArrayList<>();
+        ingredientWithTargets.forEach(ing -> allTargets.addAll(ing.getTargets()));
+        diseaseWithTargets.forEach(dis -> allTargets.addAll(dis.getTargets()));
+
+        List<Target> targets =
+                allTargets.stream().filter(tar -> {
+                    String type = tar.getTtdTargetType();
+                    if (type == null) return false;
+                    return type.equals("Successful target");
+                }).collect(
+                collectingAndThen(
+                        toCollection(() -> new TreeSet<>(comparing(Target::getId))), ArrayList::new
+                ));
+        List<String> targetIds =
+                targets.stream().map(Target::getId).collect(Collectors.toList());
+        ClusterSetting setting = new ClusterSetting();
+        GetClusterRequest req = new GetClusterRequest(setting, targetIds);
+        GetClusterResponse res = predictClient.getCluster(req);
+
+        if (res.code.equals("0")) {
+            Map<String, List> result = new HashMap<>();
+            result.put("herbs", herbs);
+            result.put("ingredients", ingredientWithTargets);
+            result.put("targets", targets);
+            result.put("diseases", diseaseWithTargets);
+            result.put("ppi", res.getRel());
+            result.put("targetCluster", res.getClusterResult());
+            return Result.ofSuccess(result);
+        } else {
+            return Result.ofFail("2", "rpc server failed");
+        }
     }
 }

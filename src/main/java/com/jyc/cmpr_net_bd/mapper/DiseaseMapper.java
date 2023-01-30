@@ -11,5 +11,7 @@ import java.util.List;
  * @date 2023/1/16 11:13
  */
 public interface DiseaseMapper extends BaseMapper<Disease> {
+    public List<Disease> getDiseaseSuggestion(String keyword);
+
     public List<Disease> getDiseaseWithTargetsById(String diseaseId);
 }

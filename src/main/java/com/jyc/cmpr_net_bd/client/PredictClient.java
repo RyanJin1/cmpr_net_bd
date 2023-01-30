@@ -36,7 +36,7 @@ public class PredictClient {
 
     public void init() {
         try {
-            transport = new TSocket(host, port, 30000);
+            transport = new TSocket(host, port, 120000);
             protocol = new TBinaryProtocol(transport);
             predictService = new PredictService.Client(protocol);
         } catch (Exception e) {
@@ -63,6 +63,18 @@ public class PredictClient {
         } catch (TException e) {
             e.printStackTrace();
             return new GraphResponse("1", new ArrayList<>(), new ArrayList<>());
+        } finally {
+            close();
+        }
+    }
+
+    public GetClusterResponse getCluster(GetClusterRequest req) {
+        try {
+            open();
+            return predictService.GetCluster(req);
+        } catch (TException e) {
+            e.printStackTrace();
+            return new GetClusterResponse("1", new ArrayList<>(), new ArrayList<>());
         } finally {
             close();
         }

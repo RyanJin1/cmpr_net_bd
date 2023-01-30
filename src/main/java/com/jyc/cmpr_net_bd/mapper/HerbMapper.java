@@ -13,5 +13,7 @@ import java.util.List;
  */
 @Mapper
 public interface HerbMapper extends BaseMapper<Herb> {
+    public List<Herb> getHerbsById(List<String> idList);
+
     public List<Herb> getHerbsWithIngredientsById(List<String> idList);
 }

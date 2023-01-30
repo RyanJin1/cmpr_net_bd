@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jyc.cmpr_net_bd.mapper.DiseaseMapper">
-    <resultMap id="DiseaseResultMap" type="com.jyc.cmpr_net_bd.entity.Disease">
+    <resultMap id="BaseDiseaseResultMap" type="com.jyc.cmpr_net_bd.entity.Disease">
         <id column="disease_id" jdbcType="VARCHAR" property="id" />
         <result column="disease_name" jdbcType="VARCHAR" property="name"/>
         <result column="umls_id" jdbcType="VARCHAR" property="umlsId"/>
@@ -11,6 +11,8 @@
         <result column="icd10cm_id" jdbcType="VARCHAR" property="icd10cmId"/>
         <result column="meddra_id" jdbcType="VARCHAR" property="meddraId"/>
         <result column="linkDiseaseId" jdbcType="VARCHAR" property="linkDiseaseId"/>
+    </resultMap>
+    <resultMap id="DiseaseResultMap" extends="BaseDiseaseResultMap" type="com.jyc.cmpr_net_bd.entity.Disease">
         <collection property="targets" ofType="com.jyc.cmpr_net_bd.entity.Target">
             <id column="HERB_target_id" jdbcType="VARCHAR" property="id" />
             <result column="Tax_id" jdbcType="VARCHAR" property="taxId"/>
@@ -29,6 +31,12 @@
             <result column="TTD_target_type" jdbcType="VARCHAR" property="ttdTargetType"/>
         </collection>
     </resultMap>
+
+    <select id="getDiseaseSuggestion" resultMap="BaseDiseaseResultMap">
+        SELECT *
+        FROM disease
+        WHERE disease_name LIKE "%"#{keyword}"%"
+    </select>
 
     <select id="getDiseaseWithTargetsById" resultMap="DiseaseResultMap">
         SELECT d.*, t.*
