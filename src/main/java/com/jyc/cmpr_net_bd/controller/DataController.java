@@ -151,7 +151,25 @@ public class DataController {
             result.put("targetCluster", res.getClusterResult());
             return Result.ofSuccess(result);
         } else {
-            return Result.ofFail("2", "rpc server failed");
+            return Result.ofFail("2", res.getMsg());
+        }
+    }
+
+    @PostMapping("/enrichment")
+    public Result getEnrichment(@RequestParam("targets") List<String> targets,
+                                @RequestParam("cutoff") Float cutoff,
+                                @RequestParam("geneSet") String geneSet) {
+        if (targets.size() == 0) {
+            return Result.ofFail("2", "Input id list is empty");
+        }
+        EnrichmentSetting setting = new EnrichmentSetting(geneSet, cutoff);
+        EnrichmentRequest req = new EnrichmentRequest(targets, setting);
+        EnrichmentResponse res = predictClient.getEnrichment(req);
+
+        if (res.code.equals("0")) {
+            return Result.ofSuccess(res.result);
+        } else {
+            return Result.ofFail("2", res.getMsg());
         }
     }
 }

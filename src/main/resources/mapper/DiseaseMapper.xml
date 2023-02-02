@@ -26,7 +26,7 @@
             <result column="OMIM_id" jdbcType="VARCHAR" property="omimId"/>
             <result column="HGNC_id" jdbcType="VARCHAR" property="hgncId"/>
             <result column="Ensembl_id" jdbcType="VARCHAR" property="ensemblId"/>
-            <result column="MGI_id" jdbcType="VARCHAR" property="mhiId"/>
+            <result column="MGI_id" jdbcType="VARCHAR" property="mgiId"/>
             <result column="TTD_target_id" jdbcType="VARCHAR" property="ttdTargetId"/>
             <result column="TTD_target_type" jdbcType="VARCHAR" property="ttdTargetType"/>
         </collection>

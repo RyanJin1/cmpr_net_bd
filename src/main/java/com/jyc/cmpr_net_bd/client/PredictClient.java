@@ -80,6 +80,18 @@ public class PredictClient {
         }
     }
 
+    public EnrichmentResponse getEnrichment(EnrichmentRequest req) {
+        try {
+            open();
+            return predictService.GetEnrichment(req);
+        } catch (TException e) {
+            e.printStackTrace();
+            return new EnrichmentResponse("1", new ArrayList<>());
+        } finally {
+            close();
+        }
+    }
+
     public void open() throws TTransportException {
         transport.open();
     }

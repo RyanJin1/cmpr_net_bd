@@ -58,7 +58,7 @@ public class Target {
     private String ensemblId;
 
     @TableField("MGI_id")
-    private String mhiId;
+    private String mgiId;
 
     @TableField("TTD_target_id")
     private String ttdTargetId;
