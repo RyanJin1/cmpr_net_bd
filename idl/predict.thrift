@@ -2,7 +2,7 @@ namespace java java.thrift.generated
 namespace py py.thrift.generated
 
 struct PredictRequest {
-    1: list<string> symptoms
+    1: string disease
 }
 
 struct PredictItem {

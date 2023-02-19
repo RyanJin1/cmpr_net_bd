@@ -51,10 +51,8 @@ public class DataController {
     }
 
     @PostMapping("/predict")
-    public Result predict(@RequestParam("idList") List<String> idList) {
-        if (idList.size() == 0)
-            return Result.ofFail("2", "Something wrong");
-        PredictRequest req = new PredictRequest(idList);
+    public Result predict(@RequestParam("diseaseId") String diseaseId) {
+        PredictRequest req = new PredictRequest(diseaseId);
         PredictResponse res = predictClient.predict(req);
         if (res.code.equals("0")) {
             return Result.ofSuccess(res.result);
