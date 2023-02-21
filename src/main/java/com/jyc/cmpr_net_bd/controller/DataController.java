@@ -100,22 +100,20 @@ public class DataController {
         return Result.ofSuccess(diseases);
     }
 
+    @PostMapping("/herbsWithIngredients")
+    public Result getHerbsWithIngredientsById(@RequestParam("idList") List<String> idList) {
+        List<Herb> herbs = herbService.getHerbsWithIngredientsById(idList);
+        return Result.ofSuccess(herbs);
+    }
+
     @PostMapping("/data/graph")
-    public Result getGraph(@RequestParam("herbIds") List<String> herbIds, @RequestParam("diseaseId") String diseaseId) {
-        if (herbIds.size() == 0 || diseaseId == null) {
-            return Result.ofFail("2", "Input id list is empty");
+    public Result getGraph(@RequestParam("ingredientIds") List<String> ingredientIds,
+                           @RequestParam("diseaseId") String diseaseId) {
+        if (ingredientIds.size() == 0) {
+            return Result.ofFail("2", "Please choose at least 1 ingredient");
         }
-        List<Herb> herbs = herbService.getHerbsWithIngredientsById(herbIds);
-        List<Ingredient> allIngredients = new ArrayList<>();
-        herbs.forEach(herb -> {
-            allIngredients.addAll(herb.getIngredients());
-        });
-        List<Ingredient> ingredients = allIngredients.stream().collect(
-                collectingAndThen(
-                        toCollection(() -> new TreeSet<>(comparing(Ingredient::getId))), ArrayList::new
-                ));
         List<Ingredient> ingredientWithTargets =
-                ingredientService.getIngredientsWithTargetsById(ingredients.stream().map(Ingredient::getId).collect(Collectors.toList()));
+                ingredientService.getIngredientsWithTargetsById(ingredientIds);
 
         List<Disease> diseaseWithTargets =
                 diseaseService.getDiseaseWithTargetsById(diseaseId);
@@ -128,21 +126,24 @@ public class DataController {
                 allTargets.stream().filter(tar -> {
                     String type = tar.getTtdTargetType();
                     if (type == null) return false;
-                    return type.equals("Successful target");
+                    return !type.equals("Discontinued target");
                 }).collect(
                 collectingAndThen(
                         toCollection(() -> new TreeSet<>(comparing(Target::getId))), ArrayList::new
                 ));
+        if (targets.size() == 0) {
+            return Result.ofSuccess("No related targets");
+        }
         List<String> targetIds =
                 targets.stream().map(Target::getId).collect(Collectors.toList());
+
+
         ClusterSetting setting = new ClusterSetting();
         GetClusterRequest req = new GetClusterRequest(setting, targetIds);
         GetClusterResponse res = predictClient.getCluster(req);
 
         if (res.code.equals("0")) {
             Map<String, List> result = new HashMap<>();
-            result.put("herbs", herbs);
-            result.put("ingredients", ingredientWithTargets);
             result.put("targets", targets);
             result.put("diseases", diseaseWithTargets);
             result.put("ppi", res.getRel());

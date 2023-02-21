@@ -68,5 +68,29 @@ public class Ingredient {
     @TableField("TCMSP_id")
     private String TCMSPId;
 
+    @TableField("alogp")
+    private Float alogp;
+
+    @TableField("hdon")
+    private Float hdon;
+
+    @TableField("hacc")
+    private Float hacc;
+
+    @TableField("caco_2")
+    private Float caco_2;
+
+    @TableField("bbb")
+    private Float bbb;
+
+    @TableField("dl")
+    private Float dl;
+
+    @TableField("FASA")
+    private Float FASA;
+
+    @TableField("hl")
+    private Float hl;
+
     private List<Target> targets;
 }

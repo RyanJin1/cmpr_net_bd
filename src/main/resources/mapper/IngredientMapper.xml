@@ -17,6 +17,14 @@
         <result column="TCM_ID_id" jdbcType="VARCHAR" property="TCM_IDId"/>
         <result column="TCMID_id" jdbcType="VARCHAR" property="TCMIDId"/>
         <result column="TCMSP_id" jdbcType="VARCHAR" property="TCMSPId"/>
+        <result column="alogp" jdbcType="FLOAT" property="alogp"/>
+        <result column="hdon" jdbcType="FLOAT" property="hdon"/>
+        <result column="hacc" jdbcType="FLOAT" property="hacc"/>
+        <result column="caco_2" jdbcType="FLOAT" property="caco_2"/>
+        <result column="bbb" jdbcType="FLOAT" property="bbb"/>
+        <result column="dl" jdbcType="FLOAT" property="dl"/>
+        <result column="FASA" jdbcType="FLOAT" property="FASA"/>
+        <result column="hl" jdbcType="FLOAT" property="hl"/>
         <collection property="targets" ofType="com.jyc.cmpr_net_bd.entity.Target">
             <id column="HERB_target_id" jdbcType="VARCHAR" property="id" />
             <result column="Tax_id" jdbcType="VARCHAR" property="taxId"/>
