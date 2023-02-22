@@ -33,7 +33,7 @@ public class Ingredient {
     private String casId;
 
     @TableField("DrugBank_id")
-    private String DrugBankId;
+    private String drugBankId;
 
     @TableField("ingredient_smile")
     private String smiles;
@@ -42,7 +42,7 @@ public class Ingredient {
     private String formula;
 
     @TableField("HERB_id")
-    private String HERBId;
+    private String herbId;
 
     @TableField("ingredient_name")
     private String name;
@@ -57,16 +57,16 @@ public class Ingredient {
     private String type;
 
     @TableField("PubChem_id")
-    private String PubChemId;
+    private String pubChemId;
 
     @TableField("TCM_ID_id")
-    private String TCM_IDId;
+    private String tcm_idId;
 
     @TableField("TCMID_id")
-    private String TCMIDId;
+    private String tcmidId;
 
     @TableField("TCMSP_id")
-    private String TCMSPId;
+    private String tcmspId;
 
     @TableField("alogp")
     private Float alogp;
@@ -87,7 +87,7 @@ public class Ingredient {
     private Float dl;
 
     @TableField("FASA")
-    private Float FASA;
+    private Float fasa;
 
     @TableField("hl")
     private Float hl;

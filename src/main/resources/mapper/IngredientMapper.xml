@@ -5,25 +5,25 @@
         <id column="ingredient_id" jdbcType="VARCHAR" property="id" />
         <result column="alias" jdbcType="VARCHAR" property="alias"/>
         <result column="cas_id" jdbcType="VARCHAR" property="casId"/>
-        <result column="DrugBank_id" jdbcType="VARCHAR" property="DrugBankId"/>
+        <result column="DrugBank_id" jdbcType="VARCHAR" property="drugBankId"/>
         <result column="ingredient_smile" jdbcType="VARCHAR" property="smiles"/>
         <result column="ingredient_formula" jdbcType="VARCHAR" property="formula"/>
-        <result column="HERB_id" jdbcType="VARCHAR" property="HERBId"/>
+        <result column="HERB_id" jdbcType="VARCHAR" property="herbId"/>
         <result column="ingredient_name" jdbcType="VARCHAR" property="name"/>
         <result column="ingredient_weight" jdbcType="VARCHAR" property="weight"/>
         <result column="ob_score" jdbcType="FLOAT" property="obScore"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
-        <result column="PubChem_id" jdbcType="VARCHAR" property="PubChemId"/>
-        <result column="TCM_ID_id" jdbcType="VARCHAR" property="TCM_IDId"/>
-        <result column="TCMID_id" jdbcType="VARCHAR" property="TCMIDId"/>
-        <result column="TCMSP_id" jdbcType="VARCHAR" property="TCMSPId"/>
+        <result column="PubChem_id" jdbcType="VARCHAR" property="pubChemId"/>
+        <result column="TCM_ID_id" jdbcType="VARCHAR" property="tcm_idId"/>
+        <result column="TCMID_id" jdbcType="VARCHAR" property="tcmidId"/>
+        <result column="TCMSP_id" jdbcType="VARCHAR" property="tcmspId"/>
         <result column="alogp" jdbcType="FLOAT" property="alogp"/>
         <result column="hdon" jdbcType="FLOAT" property="hdon"/>
         <result column="hacc" jdbcType="FLOAT" property="hacc"/>
         <result column="caco_2" jdbcType="FLOAT" property="caco_2"/>
         <result column="bbb" jdbcType="FLOAT" property="bbb"/>
         <result column="dl" jdbcType="FLOAT" property="dl"/>
-        <result column="FASA" jdbcType="FLOAT" property="FASA"/>
+        <result column="FASA" jdbcType="FLOAT" property="fasa"/>
         <result column="hl" jdbcType="FLOAT" property="hl"/>
         <collection property="targets" ofType="com.jyc.cmpr_net_bd.entity.Target">
             <id column="HERB_target_id" jdbcType="VARCHAR" property="id" />
