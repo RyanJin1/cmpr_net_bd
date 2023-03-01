@@ -7,9 +7,11 @@ import com.jyc.cmpr_net_bd.thrift.*;
 import com.jyc.cmpr_net_bd.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
+
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,7 +78,7 @@ public class DataController {
         }
     }
 
-    @GetMapping("/disease/{keyword}")
+    @GetMapping("/disease/suggestion/{keyword}")
     public Result getDiseaseSuggestion(@PathVariable("keyword") String keyword) {
         List<Disease> diseases = diseaseService.getDiseaseSuggestion(keyword);
         return Result.ofSuccess(diseases);
@@ -88,64 +90,39 @@ public class DataController {
         return Result.ofSuccess(tcmSymptoms);
     }
 
-    @PostMapping("/ingredients")
-    public Result getIngredients(@RequestParam("idList") List<String> idList) {
-        List<Ingredient> ingredients = ingredientService.getIngredientsWithTargetsById(idList);
-        return Result.ofSuccess(ingredients);
+    @PostMapping("/scatterData")
+    public Result getScatterData(@RequestParam("herbIds") List<String> herbIds) {
+        List<Herb> herbs = herbService.getHerbsWithIngredientsById(herbIds);
+        List<Ingredient> allIngredients = new ArrayList<>();
+        herbs.forEach(herb -> allIngredients.addAll(herb.getIngredients()));
+        List<Ingredient> ingredients = allIngredients.stream().collect(
+                collectingAndThen(
+                        toCollection(
+                                () -> new TreeSet<>(comparing(Ingredient::getId))), ArrayList::new
+                ));
+        List<String> ingredientIds = ingredients.stream().map(Ingredient::getId).collect(Collectors.toList());
+        List<Ingredient> ingredientsWithTargets = ingredientService.getIngredientsWithTargetsById(ingredientIds);
+        return Result.ofSuccess(ingredientsWithTargets);
     }
 
-    @PostMapping("/disease")
-    public Result getDisease(@RequestParam("id") String diseaseId) {
+    @GetMapping("/disease/{diseaseId}")
+    public Result getDisease(@PathVariable("diseaseId") String diseaseId) {
         List<Disease> diseases = diseaseService.getDiseaseWithTargetsById(diseaseId);
         return Result.ofSuccess(diseases);
     }
 
-    @PostMapping("/herbsWithIngredients")
-    public Result getHerbsWithIngredientsById(@RequestParam("idList") List<String> idList) {
-        List<Herb> herbs = herbService.getHerbsWithIngredientsById(idList);
-        return Result.ofSuccess(herbs);
-    }
 
     @PostMapping("/data/graph")
-    public Result getGraph(@RequestParam("ingredientIds") List<String> ingredientIds,
-                           @RequestParam("diseaseId") String diseaseId) {
-        if (ingredientIds.size() == 0) {
-            return Result.ofFail("2", "Please choose at least 1 ingredient");
+    public Result getGraph(@RequestParam("targetIds") List<String> targetIds) {
+        if (targetIds.size() == 0) {
+            return Result.ofFail("2", "No related targets");
         }
-        List<Ingredient> ingredientWithTargets =
-                ingredientService.getIngredientsWithTargetsById(ingredientIds);
-
-        List<Disease> diseaseWithTargets =
-                diseaseService.getDiseaseWithTargetsById(diseaseId);
-
-        List<Target> allTargets = new ArrayList<>();
-        ingredientWithTargets.forEach(ing -> allTargets.addAll(ing.getTargets()));
-        diseaseWithTargets.forEach(dis -> allTargets.addAll(dis.getTargets()));
-
-        List<Target> targets =
-                allTargets.stream().filter(tar -> {
-                    String type = tar.getTtdTargetType();
-                    if (type == null) return false;
-                    return !type.equals("Discontinued target");
-                }).collect(
-                collectingAndThen(
-                        toCollection(() -> new TreeSet<>(comparing(Target::getId))), ArrayList::new
-                ));
-        if (targets.size() == 0) {
-            return Result.ofSuccess("No related targets");
-        }
-        List<String> targetIds =
-                targets.stream().map(Target::getId).collect(Collectors.toList());
-
-
-        ClusterSetting setting = new ClusterSetting();
+        ClusterSetting setting = new ClusterSetting(1, 0.01, "CPM");
         GetClusterRequest req = new GetClusterRequest(setting, targetIds);
         GetClusterResponse res = predictClient.getCluster(req);
 
         if (res.code.equals("0")) {
             Map<String, List> result = new HashMap<>();
-            result.put("targets", targets);
-            result.put("diseases", diseaseWithTargets);
             result.put("ppi", res.getRel());
             result.put("targetCluster", res.getClusterResult());
             return Result.ofSuccess(result);
